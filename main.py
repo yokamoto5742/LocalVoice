@@ -1,6 +1,8 @@
 import logging
 import traceback
 
+import numpy  # noqa: F401  PyInstaller の numpy 依存解決を確実にするため
+
 from app import __version__
 from app.application import Application
 from app.error_handler import show_error_dialog, write_error_report

@@ -3,7 +3,6 @@ name = "voicescribe"
 version = "2.0.2"
 requires-python = ">=3.13"
 dependencies = [
-    "elevenlabs==2.25.0",
     "keyboard==0.13.5",
     "PyAudio==0.2.14",
     "pyperclip==1.9.0",
