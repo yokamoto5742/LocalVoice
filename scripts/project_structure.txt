@@ -1,0 +1,43 @@
+============================================================
+プロジェクト構造: VoiceScribe
+パス: C:\Users\yokam\PycharmProjects\VoiceScribe
+生成日時: 2026-04-19 11:54:20
+============================================================
+
+└── VoiceScribe
+    ├── app
+    │   ├── application.py
+    │   ├── error_handler.py
+    │   ├── main_window.py
+    │   ├── notification_manager.py
+    │   ├── replacements_editor.py
+    │   ├── ui_components.py
+    │   └── ui_queue_processor.py
+    ├── data
+    │   └── replacements.txt
+    ├── docs
+    │   ├── CHANGELOG.md
+    │   └── LICENSE
+    ├── external_service
+    │   └── elevenlabs_api.py
+    ├── service
+    │   ├── audio_file_manager.py
+    │   ├── audio_recorder.py
+    │   ├── clipboard_manager.py
+    │   ├── keyboard_handler.py
+    │   ├── paste_backend.py
+    │   ├── recording_lifecycle.py
+    │   ├── recording_timer.py
+    │   ├── text_transformer.py
+    │   └── transcription_handler.py
+    ├── utils
+    │   ├── config.ini
+    │   ├── app_config.py
+    │   ├── config_manager.py
+    │   ├── log_rotation.py
+    │   └── process_setup.py
+    ├── pyproject.toml
+    ├── build.py
+    ├── CLAUDE.md
+    ├── main.py
+    └── README.md
