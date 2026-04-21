@@ -28,9 +28,11 @@ class WhisperCppBackend:
         try:
             from pywhispercpp.model import Model
         except ImportError as e:
+            logging.error(f'pywhispercpp の読み込みに失敗: {e}')
+            logging.debug(f'詳細: {traceback.format_exc()}')
             raise ImportError(
-                'pywhispercpp がインストールされていません。'
-                'pip install pywhispercpp を実行してください'
+                f'pywhispercpp の読み込みに失敗しました: {e}. '
+                'ビルド済み実行ファイルの場合、ネイティブ DLL が同梱されていない可能性があります'
             ) from e
 
         logging.info(f'whisper.cpp モデル読み込み開始: {self._model_path}')

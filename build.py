@@ -11,10 +11,15 @@ def build_executable():
         "--name=VoiceScribe",
         "--windowed",
         "--icon=assets/VoiceScribe.ico",
-        "--add-data", ".env:.",
         "--add-data", "utils/config.ini:.",
         "--add-data", "data/replacements.txt:.",
         "--collect-all", "pywhispercpp",
+        "--collect-binaries", "pywhispercpp",
+        "--collect-submodules", "pywhispercpp",
+        "--collect-data", "pywhispercpp",
+        "--hidden-import", "pywhispercpp",
+        "--hidden-import", "pywhispercpp.model",
+        "--hidden-import", "_pywhispercpp",
         "main.py"
     ])
 
