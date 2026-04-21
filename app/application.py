@@ -5,7 +5,9 @@ from app import __version__
 from app.main_window import VoiceInputManager
 from app.notification_manager import NotificationManager
 from app.ui_queue_processor import UIQueueProcessor
-from external_service.elevenlabs_api import setup_elevenlabs_client
+from external_service.elevenlabs_api import ElevenLabsBackend, setup_elevenlabs_client
+from external_service.transcription_backend import TranscriptionBackend
+from external_service.whispercpp_backend import WhisperCppBackend
 from service.audio_file_manager import AudioFileManager
 from service.audio_recorder import AudioRecorder
 from service.clipboard_manager import ClipboardManager
@@ -30,8 +32,7 @@ class Application:
         logging.info('アプリケーションを開始します')
 
         recorder = AudioRecorder(config)
-        client = setup_elevenlabs_client()
-        logging.info('ElevenLabs APIクライアントを初期化しました')
+        backend = self._create_backend(config)
 
         replacements = load_replacements(config.replacements_file)
         clipboard_manager = ClipboardManager(config, replacements)
@@ -46,7 +47,7 @@ class Application:
         notification_manager = NotificationManager(root, config)
 
         transcription_handler = TranscriptionHandler(
-            config, client, audio_file_manager, ui_processor, config.use_punctuation
+            config, backend, audio_file_manager, ui_processor, config.use_punctuation
         )
 
         recording_lifecycle = RecordingLifecycle(
@@ -65,3 +66,15 @@ class Application:
     def close(self) -> None:
         if self._voice_manager:
             self._voice_manager.close_application()
+
+    @staticmethod
+    def _create_backend(config: AppConfig) -> TranscriptionBackend:
+        backend_name = config.transcription_backend.lower()
+        if backend_name == 'whispercpp':
+            logging.info('whisper.cpp バックエンドを使用します')
+            return WhisperCppBackend(config)
+        if backend_name == 'elevenlabs':
+            client = setup_elevenlabs_client()
+            logging.info('ElevenLabs APIクライアントを初期化しました')
+            return ElevenLabsBackend(config, client)
+        raise ValueError(f'未対応の文字起こしバックエンド: {backend_name}')

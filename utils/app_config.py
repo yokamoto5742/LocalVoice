@@ -62,6 +62,23 @@ class AppConfig:
     def paste_delay(self) -> float:
         return get_config_value(self._config, 'CLIPBOARD', 'PASTE_DELAY', 0.3)
 
+    # --- TRANSCRIPTION ---
+    @property
+    def transcription_backend(self) -> str:
+        return get_config_value(self._config, 'TRANSCRIPTION', 'BACKEND', 'elevenlabs')
+
+    # --- WHISPERCPP ---
+    @property
+    def whispercpp_model_path(self) -> str:
+        return get_config_value(
+            self._config, 'WHISPERCPP', 'MODEL_PATH',
+            r'C:\Shinseikai\VoiceScribe\models\ggml-small.bin'
+        )
+
+    @property
+    def whispercpp_n_threads(self) -> int:
+        return get_config_value(self._config, 'WHISPERCPP', 'N_THREADS', 4)
+
     # --- ELEVENLABS ---
     @property
     def elevenlabs_model(self) -> str:

@@ -10,6 +10,17 @@ from utils.app_config import AppConfig
 from utils.env_loader import load_env_variables
 
 
+class ElevenLabsBackend:
+    """ElevenLabs API を用いた文字起こしバックエンド"""
+
+    def __init__(self, config: AppConfig, client: ElevenLabs) -> None:
+        self._config = config
+        self._client = client
+
+    def transcribe(self, audio_file_path: str) -> Optional[str]:
+        return transcribe_audio(audio_file_path, self._config, self._client)
+
+
 def setup_elevenlabs_client() -> ElevenLabs:
     env_vars = load_env_variables()
     api_key = env_vars.get('ELEVENLABS_API_KEY')

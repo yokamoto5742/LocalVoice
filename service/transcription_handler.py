@@ -1,10 +1,10 @@
 import logging
 import threading
 import traceback
-from typing import Any, Callable, List, Optional
+from typing import Callable, List, Optional
 
 from app.ui_queue_processor import UIQueueProcessor
-from external_service.elevenlabs_api import transcribe_audio
+from external_service.transcription_backend import TranscriptionBackend
 from service.audio_file_manager import AudioFileManager
 from service.text_transformer import process_punctuation
 from utils.app_config import AppConfig
@@ -15,20 +15,19 @@ class TranscriptionHandler:
     def __init__(
             self,
             config: AppConfig,
-            client: Any,
+            backend: TranscriptionBackend,
             audio_file_manager: AudioFileManager,
             ui_processor: UIQueueProcessor,
             use_punctuation: bool
     ):
         self.config = config
-        self.client = client
+        self.backend = backend
         self.audio_file_manager = audio_file_manager
         self.ui_processor = ui_processor
         self.use_punctuation = use_punctuation
 
         self.cancel_processing = False
         self.processing_thread: Optional[threading.Thread] = None
-        self.transcribe_audio_func = transcribe_audio
 
     def transcribe_frames(
             self,
@@ -54,11 +53,7 @@ class TranscriptionHandler:
                 return
 
             logging.info('文字起こし開始')
-            transcription = self.transcribe_audio_func(
-                temp_audio_file,
-                self.config,
-                self.client
-            )
+            transcription = self.backend.transcribe(temp_audio_file)
 
             if not transcription:
                 raise ValueError('音声ファイルの文字起こしに失敗しました')
@@ -88,11 +83,7 @@ class TranscriptionHandler:
     ) -> None:
         """保存した音声ファイルを文字起こしする"""
         try:
-            transcription = self.transcribe_audio_func(
-                file_path,
-                self.config,
-                self.client
-            )
+            transcription = self.backend.transcribe(file_path)
             if transcription:
                 transcription = process_punctuation(transcription, self.use_punctuation)
                 on_complete(transcription)
