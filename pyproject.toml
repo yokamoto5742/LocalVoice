@@ -3,6 +3,7 @@ name = "voicescribe"
 version = "0.0.0"
 requires-python = ">=3.12"
 dependencies = [
+    "elevenlabs==2.25.0",
     "keyboard==0.13.5",
     "numpy==1.26.4",
     "PyAudio==0.2.14",
@@ -28,7 +29,7 @@ python_files = "test_*.py"
 
 [tool.pyright]
 typeCheckingMode = "standard"
-pythonVersion = "3.13"
+pythonVersion = "3.12"
 include = ["app", "service", "utils", "tests"]
 exclude = ["scripts"]
 reportMissingTypeStubs = false
