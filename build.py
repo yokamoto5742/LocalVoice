@@ -17,11 +17,9 @@ def build_executable():
         "--collect-binaries", "pywhispercpp",
         "--collect-submodules", "pywhispercpp",
         "--collect-data", "pywhispercpp",
-        "--collect-all", "numpy",
         "--hidden-import", "pywhispercpp",
         "--hidden-import", "pywhispercpp.model",
         "--hidden-import", "_pywhispercpp",
-        "--hidden-import", "numpy",
         "main.py"
     ])
 
