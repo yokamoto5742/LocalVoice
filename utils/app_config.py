@@ -70,10 +70,7 @@ class AppConfig:
     # --- WHISPERCPP ---
     @property
     def whispercpp_model_path(self) -> str:
-        return get_config_value(
-            self._config, 'WHISPERCPP', 'MODEL_PATH',
-            r'C:\Shinseikai\LocalVoice\models\ggml-large-v3-turbo-q5_0.bin'
-        )
+        return get_config_value(self._config, 'WHISPERCPP', 'MODEL_PATH', '')
 
     @property
     def whispercpp_n_threads(self) -> int:
