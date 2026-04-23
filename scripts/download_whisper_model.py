@@ -3,8 +3,8 @@ import os
 import sys
 import urllib.request
 
-MODEL_URL = 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin'
-DEFAULT_MODEL_PATH = r'C:\Shinseikai\VoiceScribe\models\ggml-small.bin'
+MODEL_URL = 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo-q5_0.bin'
+DEFAULT_MODEL_PATH = r'C:\Shinseikai\VoiceScribe\models\ggml-large-v3-turbo-q5_0.bin'
 
 
 def _report_progress(block_num: int, block_size: int, total_size: int) -> None:
