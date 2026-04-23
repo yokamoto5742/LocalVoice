@@ -96,14 +96,16 @@ class TestWhisperCppBackendTranscribe:
         result = backend.transcribe('/audio.wav')
 
         assert result == 'こんにちは世界'
-        mock_model_class.assert_called_once_with(
-            '/test/model.bin',
-            n_threads=2,
-            language='ja',
-            print_realtime=False,
-            print_progress=False,
-        )
-        mock_model_instance.transcribe.assert_called_once_with('/audio.wav')
+        assert mock_model_class.call_count == 1
+        args, kwargs = mock_model_class.call_args
+        assert args == ('/test/model.bin',)
+        assert kwargs['n_threads'] == 2
+        assert kwargs['language'] == 'ja'
+        assert kwargs['print_realtime'] is False
+        assert kwargs['print_progress'] is False
+        assert mock_model_instance.transcribe.call_count == 1
+        call_args, _ = mock_model_instance.transcribe.call_args
+        assert call_args == ('/audio.wav',)
 
     @patch('external_service.whispercpp_backend.os.path.getsize')
     @patch('external_service.whispercpp_backend.os.path.exists')

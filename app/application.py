@@ -1,4 +1,5 @@
 import logging
+import threading
 import tkinter as tk
 
 from app import __version__
@@ -32,6 +33,7 @@ class Application:
 
         recorder = AudioRecorder(config)
         backend = self._create_backend(config)
+        self._preload_backend_async(backend, config)
 
         replacements = load_replacements(config.replacements_file)
         clipboard_manager = ClipboardManager(config, replacements)
@@ -65,6 +67,18 @@ class Application:
     def close(self) -> None:
         if self._voice_manager:
             self._voice_manager.close_application()
+
+    @staticmethod
+    def _preload_backend_async(backend: TranscriptionBackend, config: AppConfig) -> None:
+        """初回録音時のレイテンシ削減のためモデルを事前ロードする"""
+        if not config.whispercpp_preload_model:
+            return
+        preload = getattr(backend, 'preload', None)
+        if not callable(preload):
+            return
+        thread = threading.Thread(target=preload, name='ModelPreload', daemon=True)
+        thread.start()
+        logging.info('モデル事前ロードをバックグラウンドで開始しました')
 
     @staticmethod
     def _create_backend(config: AppConfig) -> TranscriptionBackend:

@@ -76,6 +76,55 @@ class AppConfig:
     def whispercpp_n_threads(self) -> int:
         return get_config_value(self._config, 'WHISPERCPP', 'N_THREADS', 4)
 
+    @property
+    def whispercpp_beam_size(self) -> int:
+        return get_config_value(self._config, 'WHISPERCPP', 'BEAM_SIZE', 1)
+
+    @property
+    def whispercpp_best_of(self) -> int:
+        return get_config_value(self._config, 'WHISPERCPP', 'BEST_OF', 1)
+
+    @property
+    def whispercpp_no_speech_thold(self) -> float:
+        return get_config_value(self._config, 'WHISPERCPP', 'NO_SPEECH_THOLD', 0.6)
+
+    @property
+    def whispercpp_logprob_thold(self) -> float:
+        return get_config_value(self._config, 'WHISPERCPP', 'LOGPROB_THOLD', -1.0)
+
+    @property
+    def whispercpp_temperature(self) -> float:
+        return get_config_value(self._config, 'WHISPERCPP', 'TEMPERATURE', 0.0)
+
+    @property
+    def whispercpp_suppress_blank(self) -> bool:
+        return get_config_value(self._config, 'WHISPERCPP', 'SUPPRESS_BLANK', True)
+
+    @property
+    def whispercpp_single_segment(self) -> bool:
+        return get_config_value(self._config, 'WHISPERCPP', 'SINGLE_SEGMENT', False)
+
+    @property
+    def whispercpp_preload_model(self) -> bool:
+        return get_config_value(self._config, 'WHISPERCPP', 'PRELOAD_MODEL', True)
+
+    @property
+    def whispercpp_initial_prompt_file(self) -> str:
+        return get_config_value(self._config, 'WHISPERCPP', 'INITIAL_PROMPT_FILE', '')
+
+    # --- VAD ---
+    @property
+    def vad_enabled(self) -> bool:
+        return get_config_value(self._config, 'VAD', 'ENABLED', True)
+
+    @property
+    def vad_silence_threshold(self) -> int:
+        return get_config_value(self._config, 'VAD', 'SILENCE_THRESHOLD', 300)
+
+    @property
+    def vad_padding_ms(self) -> int:
+        return get_config_value(self._config, 'VAD', 'PADDING_MS', 200)
+
     # --- FORMATTING ---
     @property
     def use_punctuation(self) -> bool:
