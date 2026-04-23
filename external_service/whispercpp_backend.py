@@ -5,6 +5,8 @@ import threading
 import traceback
 from typing import Any, Optional
 
+import numpy as np
+
 from utils.app_config import AppConfig
 
 
@@ -58,17 +60,31 @@ class WhisperCppBackend:
             'temperature': self._config.whispercpp_temperature,
             'suppress_blank': self._config.whispercpp_suppress_blank,
             'single_segment': self._config.whispercpp_single_segment,
+            'no_context': True,
+            'temperature_inc': 0.0,
         }
         if self._initial_prompt:
             params['initial_prompt'] = self._initial_prompt
         return params
 
     def preload(self) -> None:
-        """モデルをバックグラウンドで事前ロードする"""
+        """モデルをバックグラウンドで事前ロードしウォームアップする"""
         try:
             self._ensure_model_loaded()
+            self._warmup()
         except Exception as e:
             logging.warning(f'モデル事前ロード失敗: {e}')
+
+    def _warmup(self) -> None:
+        """初回推論の KV キャッシュ割当・初期化コストを先に払う"""
+        if self._model is None:
+            return
+        silent = np.zeros(16000 // 2, dtype=np.float32)
+        try:
+            self._model.transcribe(silent)
+            logging.info('whisper.cpp ウォームアップ完了')
+        except Exception as e:
+            logging.debug(f'warmup skip: {e}')
 
     def _ensure_model_loaded(self) -> None:
         if self._model is not None:
@@ -150,7 +166,8 @@ class WhisperCppBackend:
         call_params = {
             k: v for k, v in self._inference_params.items()
             if k in ('beam_size', 'best_of', 'no_speech_thold', 'logprob_thold',
-                     'temperature', 'suppress_blank', 'single_segment', 'initial_prompt')
+                     'temperature', 'suppress_blank', 'single_segment', 'initial_prompt',
+                     'no_context', 'temperature_inc')
         }
         try:
             return self._model.transcribe(audio_file_path, **call_params)
