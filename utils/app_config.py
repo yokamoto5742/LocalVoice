@@ -72,7 +72,7 @@ class AppConfig:
     def whispercpp_model_path(self) -> str:
         return get_config_value(
             self._config, 'WHISPERCPP', 'MODEL_PATH',
-            r'C:\Shinseikai\VoiceScribe\models\ggml-large-v3-turbo-q5_0.bin'
+            r'C:\Shinseikai\LocalVoice\models\ggml-large-v3-turbo-q5_0.bin'
         )
 
     @property

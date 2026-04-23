@@ -33,7 +33,7 @@ class UIComponents:
         self.close_button: Optional[tk.Button] = None
 
     def setup_ui(self, version: str) -> None:
-        self.master.title(f'VoiceScribe v{version}')
+        self.master.title(f'LocalVoice v{version}')
         self.master.geometry(f'{self.config.window_width}x{self.config.window_height}')
 
         self.record_button = tk.Button(
