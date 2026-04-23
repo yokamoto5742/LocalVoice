@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 import traceback
 from typing import Callable, List, Optional
 
@@ -52,11 +53,19 @@ class TranscriptionHandler:
                 logging.info('処理がキャンセルされました')
                 return
 
-            logging.info('文字起こし開始')
+            audio_seconds = len(frames) * self.config.audio_chunk / sample_rate
+            logging.info(f'文字起こし開始 (音声長={audio_seconds:.2f}s)')
+            start = time.perf_counter()
             transcription = self.backend.transcribe(temp_audio_file)
+            elapsed = time.perf_counter() - start
 
             if not transcription:
                 raise ValueError('音声ファイルの文字起こしに失敗しました')
+
+            rtf = elapsed / audio_seconds if audio_seconds > 0 else float('inf')
+            logging.info(
+                f'文字起こし完了: 処理時間={elapsed:.2f}s, 音声長={audio_seconds:.2f}s, RTF={rtf:.2f}'
+            )
 
             logging.debug(f'句読点処理開始: use_punctuation={self.use_punctuation}')
             transcription = process_punctuation(transcription, self.use_punctuation)
