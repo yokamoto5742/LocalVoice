@@ -100,18 +100,13 @@ class WhisperCppBackend:
             logging.info('whisper.cpp モデル読み込み完了')
 
     def _construct_model(self, model_cls: Any, params: dict) -> Any:
-        """pywhispercpp バージョン差異を吸収して Model を生成する"""
-        try:
-            return model_cls(self._model_path, **params)
-        except TypeError as e:
-            logging.warning(f'全パラメータ指定で Model 生成失敗、最小構成で再試行: {e}')
-            minimal = {
-                'language': params.get('language', 'ja'),
-                'n_threads': params.get('n_threads', self._n_threads),
-                'print_realtime': False,
-                'print_progress': False,
-            }
-            return model_cls(self._model_path, **minimal)
+        constructor_params = {
+            'language': params.get('language', 'ja'),
+            'n_threads': params.get('n_threads', self._n_threads),
+            'print_realtime': False,
+            'print_progress': False,
+        }
+        return model_cls(self._model_path, **constructor_params)
 
     def transcribe(self, audio_file_path: str) -> Optional[str]:
         if not audio_file_path:
@@ -159,5 +154,5 @@ class WhisperCppBackend:
         }
         try:
             return self._model.transcribe(audio_file_path, **call_params)
-        except TypeError:
+        except (TypeError, AttributeError):
             return self._model.transcribe(audio_file_path)
