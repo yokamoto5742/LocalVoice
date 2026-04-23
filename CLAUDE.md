@@ -26,19 +26,19 @@ python build.py
 
 ## Architecture
 
-VoiceScribe is a Windows desktop app that records microphone input, transcribes it via the ElevenLabs API, and pastes the result into the active window. Entry point: `main.py`.
+VoiceScribe is a Windows desktop app that records microphone input, transcribes it locally via whisper.cpp, and pastes the result into the active window. Entry point: `main.py`.
 
 **Layers (top to bottom):**
 
 - `app/` — Tkinter UI. `VoiceInputManager` (main_window.py) owns the window. All cross-thread UI updates go through `UIQueueProcessor.schedule_callback()`.
 - `service/` — Business logic. `RecordingLifecycle` orchestrates the full pipeline via callbacks: `AudioRecorder` → `AudioFileManager` → `TranscriptionHandler` → `TextTransformer` → `ClipboardManager` → `paste_backend`.
-- `external_service/` — 文字起こしバックエンド。`TranscriptionBackend` プロトコル、`ElevenLabsBackend`（オンライン）、`WhisperCppBackend`（オフライン、pywhispercpp 経由）を提供。`config.ini` の `[TRANSCRIPTION] backend` で切替 (`elevenlabs` | `whispercpp`)。
+- `external_service/` — 文字起こしバックエンド。`TranscriptionBackend` プロトコルと `WhisperCppBackend`（オフライン、pywhispercpp 経由）を提供。
 - `utils/` — Config loading (`AppConfig` wraps `config.ini`), logging, crash/signal setup.
 
 **Threading model:** Audio capture and transcription run in background threads. UI updates must be queued via `UIQueueProcessor`; never update Tkinter directly from a non-main thread.
 
-**Configuration:** `utils/config.ini` controls audio settings, transcription backend, ElevenLabs model/language, whisper.cpp model path、keyboard shortcuts, auto-stop timer, paste backend, and paths. API key is stored in `.env` (not committed, ElevenLabs 使用時のみ必要)。
+**Configuration:** `utils/config.ini` controls audio settings, whisper.cpp model path、keyboard shortcuts, auto-stop timer, paste backend, and paths.
 
-**オフライン文字起こし:** `config.ini` で `[TRANSCRIPTION] backend = whispercpp` を設定し、`python scripts/download_whisper_model.py` で `ggml-small.bin` を取得。日本語固定、CPU 推論。
+**オフライン文字起こし:** `python scripts/download_whisper_model.py` で `ggml-small.bin` を取得。日本語固定、CPU 推論。
 
 **Text replacement:** `data/replacements.txt` (CSV) defines post-transcription substitutions applied by `TextTransformer`.

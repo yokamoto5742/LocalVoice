@@ -9,7 +9,6 @@ from tests.conftest import dict_to_app_config
 def _make_handler(use_punctuation: bool = False, config_dict: dict | None = None):
     if config_dict is None:
         config_dict = {
-            'ELEVENLABS': {'MODEL': 'scribe_v2', 'LANGUAGE': 'jpn'},
             'PATHS': {'TEMP_DIR': '/test/temp'}
         }
     config = dict_to_app_config(config_dict)

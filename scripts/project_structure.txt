@@ -19,7 +19,8 @@
     │   ├── CHANGELOG.md
     │   └── LICENSE
     ├── external_service
-    │   └── elevenlabs_api.py
+    │   ├── transcription_backend.py
+    │   └── whispercpp_backend.py
     ├── service
     │   ├── audio_file_manager.py
     │   ├── audio_recorder.py

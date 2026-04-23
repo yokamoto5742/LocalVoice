@@ -65,7 +65,7 @@ class AppConfig:
     # --- TRANSCRIPTION ---
     @property
     def transcription_backend(self) -> str:
-        return get_config_value(self._config, 'TRANSCRIPTION', 'BACKEND', 'elevenlabs')
+        return get_config_value(self._config, 'TRANSCRIPTION', 'BACKEND', 'whispercpp')
 
     # --- WHISPERCPP ---
     @property
@@ -78,19 +78,6 @@ class AppConfig:
     @property
     def whispercpp_n_threads(self) -> int:
         return get_config_value(self._config, 'WHISPERCPP', 'N_THREADS', 4)
-
-    # --- ELEVENLABS ---
-    @property
-    def elevenlabs_model(self) -> str:
-        return get_config_value(self._config, 'ELEVENLABS', 'MODEL', 'scribe_v2')
-
-    @property
-    def elevenlabs_language(self) -> str:
-        return get_config_value(self._config, 'ELEVENLABS', 'LANGUAGE', 'jpn')
-
-    @property
-    def tag_audio_events(self) -> bool:
-        return get_config_value(self._config, 'ELEVENLABS', 'TAG_AUDIO_EVENTS', False)
 
     # --- FORMATTING ---
     @property

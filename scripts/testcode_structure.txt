@@ -10,7 +10,7 @@
     │   ├── test_replacements_editor.py
     │   └── test_ui_queue_processor.py
     ├── external_service
-    │   └── test_elevenlabs_api.py
+    │   └── test_whispercpp_backend.py
     ├── service
     │   ├── test_audio_file_manager.py
     │   ├── test_audio_recorder.py

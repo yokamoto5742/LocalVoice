@@ -122,24 +122,6 @@ class TestAppConfigRecording:
         assert config.auto_stop_timer == 120
 
 
-class TestAppConfigElevenLabs:
-    """ElevenLabs設定プロパティのテストクラス"""
-
-    def test_elevenlabs_defaults(self):
-        """正常系: デフォルト値"""
-        config = dict_to_app_config({})
-        assert config.elevenlabs_model == 'scribe_v2'
-        assert config.elevenlabs_language == 'jpn'
-        assert config.tag_audio_events is False
-
-    def test_elevenlabs_custom(self):
-        """正常系: カスタム値"""
-        config = dict_to_app_config({'ELEVENLABS': {'MODEL': 'custom_model', 'LANGUAGE': 'eng', 'TAG_AUDIO_EVENTS': 'True'}})
-        assert config.elevenlabs_model == 'custom_model'
-        assert config.elevenlabs_language == 'eng'
-        assert config.tag_audio_events is True
-
-
 class TestAppConfigRawConfig:
     """内部_configプロパティのテストクラス"""
 
